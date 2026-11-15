@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>קהילת משפחות מיוחדות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* שלושה צבעים בהירים ונעימים לעין + צבע בולט לזכויות בחינוך */
+  :root {
+    --sky: #EAF4FB;        /* תכלת בהיר – רקע העמוד */
+    --mint: #E6F5EC;       /* מנטה בהיר – זכויות כלליות */
+    --cream: #FFF8E8;      /* שמנת – כרטיסים */
+    --sky-strong: #2F6E9E;
+    --mint-strong: #2E7D55;
+    --edu-bg: #FFE6D1;     /* זכויות בחינוך – כתום בולט */
+    --edu-border: #E07A2F;
+    --edu-text: #8A3B06;
+    --text: #1E2B37;
+    --muted: #4C5B68;
+    --line: #D6E2EA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Assistant", "Segoe UI", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--sky);
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--sky-strong); }
+  :focus-visible { outline: 3px solid var(--edu-border); outline-offset: 3px; border-radius: 6px; }
+
+  /* כותרת */
+  header { background: var(--cream); border-bottom: 1px solid var(--line); padding: 32px 0 26px; }
+  .logo { font-size: 15px; font-weight: 700; color: var(--mint-strong); letter-spacing: .5px; }
+  h1 { margin: 4px 0 8px; font-size: clamp(28px, 6vw, 40px); line-height: 1.2; }
+  .lead { margin: 0; color: var(--muted); font-size: 19px; }
+
+  /* מקרא צבעים */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-size: 15px; font-weight: 600; border: 1px solid; }
+  .chip.general { background: var(--mint); border-color: #B9E0C9; color: var(--mint-strong); }
+  .chip.edu { background: var(--edu-bg); border-color: var(--edu-border); color: var(--edu-text); }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin: 8px 0 16px; }
+  .toolbar p { margin: 0; color: var(--muted); font-size: 16px; }
+  button.toggle-all {
+    font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+    padding: 8px 18px; border-radius: 10px; border: 2px solid var(--sky-strong);
+    background: #fff; color: var(--sky-strong);
+  }
+  button.toggle-all:hover { background: var(--sky); }
+
+  /* כרטיסי מוגבלויות */
+  details.condition {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(30,43,55,.05);
+  }
+  details.condition > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 20px;
+  }
+  details.condition > summary::-webkit-details-marker { display: none; }
+  .icon {
+    flex-shrink: 0; width: 52px; height: 52px; border-radius: 14px;
+    display: grid; place-items: center; font-size: 28px; background: var(--sky);
+  }
+  .title { flex: 1; }
+  .title h2 { margin: 0; font-size: 22px; line-height: 1.3; }
+  .title span { color: var(--muted); font-size: 16px; }
+  .arrow { flex-shrink: 0; font-size: 22px; color: var(--sky-strong); transition: transform .25s; }
+  details[open] > summary .arrow { transform: rotate(180deg); }
+  details.condition > summary:hover { background: #FFF3D6; }
+
+  .content { padding: 0 20px 20px; display: grid; gap: 14px; }
+  .about { margin: 0; color: var(--muted); }
+
+  .box { border-radius: 12px; padding: 14px 18px; }
+  .box h3 { margin: 0 0 6px; font-size: 19px; display: flex; align-items: center; gap: 8px; }
+  .box ul { margin: 0; padding-inline-start: 22px; }
+  .box li { margin: 6px 0; }
+  .box.general { background: var(--mint); border: 1px solid #B9E0C9; }
+  .box.general h3 { color: var(--mint-strong); }
+  .box.edu {
+    background: var(--edu-bg);
+    border: 2px solid var(--edu-border);
+    border-inline-start-width: 8px;
+  }
+  .box.edu h3 { color: var(--edu-text); }
+  .where { font-size: 15px; color: var(--muted); margin: 8px 0 0; }
+
+  /* מידע משותף */
+  .common { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 28px 0; }
+  .common .box { background: #fff; border: 1px solid var(--line); }
+  .common .box.edu { background: var(--edu-bg); border: 2px solid var(--edu-border); border-inline-start-width: 8px; }
+  h2.section { font-size: 24px; margin: 36px 0 4px; }
+
+  /* מקורות ואזהרה */
+  .note { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; font-size: 16px; color: var(--muted); }
+  .note strong { color: var(--text); }
+  .sources { columns: 2 260px; padding-inline-start: 22px; font-size: 16px; }
+  footer { margin: 32px 0 0; padding: 22px 0; background: var(--cream); border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); text-align: center; }
+
+  @media (max-width: 520px) {
+    body { font-size: 17px; }
+    details.condition > summary { padding: 14px; gap: 10px; }
+    .icon { width: 44px; height: 44px; font-size: 24px; }
+    .title h2 { font-size: 20px; }
+    .content { padding: 0 14px 16px; }
+    .box { padding: 12px 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .arrow { transition: none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">💛 קהילת משפחות מיוחדות</div>
+    <h1>מדריך זכויות להורים לילדים עם צרכים מיוחדים</h1>
+    <p class="lead">חמש המוגבלויות השכיחות, ומה מגיע לכם ולילד שלכם. לחצו על מוגבלות כדי לראות את רשימת הזכויות.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="legend" aria-label="מקרא צבעים">
+    <span class="chip general">🏛️ זכויות כלליות (ביטוח לאומי, בריאות, רווחה, מיסים)</span>
+    <span class="chip edu">🎓 זכויות התלמיד במסגרת החינוכית</span>
+  </div>
+  <div class="toolbar">
+    <p>המידע כללי. הזכאות תלויה בגיל הילד, באבחון ובהחלטות הוועדות.</p>
+    <button class="toggle-all" id="toggle-all" type="button">פתיחת הכל</button>
+  </div>
+
+  <!-- 1. הפרעת קשב וריכוז -->
+  <details class="condition">
+    <summary>
+      <span class="icon" aria-hidden="true">⚡</span>
+      <span class="title"><h2>הפרעת קשב וריכוז (ADHD)</h2><span>קושי בריכוז, אימפולסיביות או פעלתנות יתר</span></span>
+      <span class="arrow" aria-hidden="true">▾</span>
+    </summary>
+    <div class="content">
+      <p class="about">ההפרעה מאובחנת על ידי רופא שהוסמך לכך, למשל נוירולוג, פסיכיאטר או רופא ילדים, או על ידי פסיכולוג מוסמך.</p>
+      <div class="box general">
+        <h3>🏛️ זכויות כלליות</h3>
+        <ul>
+          <li><b>אבחון וטיפול דרך קופת החולים</b>, כולל תרופות לטיפול בהפרעה שנכללות בסל הבריאות.</li>
+          <li><b>גמלת ילד נכה:</b> ADHD לבדו בדרך כלל אינו מזכה, אבל ילד עם הפרעה <b>חמורה</b> שזקוק לטיפול קבוע בתרופות ממריצות עשוי להיות זכאי לפי חוזר של ביטוח לאומי. נדרש מסמך עדכני מנוירולוג ילדים או מפסיכיאטר.</li>
+          <li><b>נקודות זיכוי ממס הכנסה</b> להורים, כשהילד לומד במסגרת של החינוך המיוחד. כדאי לבדוק את הזכאות מול רשות המסים.</li>
+          <li><b>התאמות במבחנים בהמשך החיים:</b> במבחן הפסיכומטרי, במבחן התאוריה לרישיון נהיגה ובמבחני הגיוס לצה"ל.</li>
+        </ul>
+      </div>
+      <div class="box edu">
+        <h3>🎓 זכויות התלמיד בבית הספר</h3>
+        <ul>
+          <li><b>התאמות בדרכי ההיבחנות:</b> הארכת זמן (בדרך כלל 25%), בחינה בחדר נפרד ועוד. ההתאמות נקבעות בוועדה בית ספרית ותקפות גם בבחינות הבגרות.</li>
+          <li><b>שירותי שילוב:</b> שעות תמיכה ושעות טיפול בבית הספר הרגיל, לפי החלטה של ועדת זכאות ואפיון.</li>
+          <li><b>תוכנית לימודים אישית (תל"א)</b> לתלמיד שמקבל שירותי שילוב, שנבנית בשיתוף ההורים.</li>
+          <li><b>במוסדות להשכלה גבוהה:</b> התאמות בקבלה ובלימודים לפי חוק זכויות תלמידים עם לקות למידה במוסדות על-תיכוניים.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 2. אוטיזם -->
+  <details class="condition">
+    <summary>
+      <span class="icon" aria-hidden="true">🧩</span>
+      <span class="title"><h2>אוטיזם (ASD)</h2><span>רצף של קשיים בתקשורת, באינטראקציה חברתית ובוויסות</span></span>
+      <span class="arrow" aria-hidden="true">▾</span>
+    </summary>
+    <div class="content">
+      <p class="about">האבחון נעשה על ידי פסיכיאטר ילדים, נוירולוג ילדים או רופא התפתחותי, בדרך כלל יחד עם פסיכולוג.</p>
+      <div class="box general">
+        <h3>🏛️ זכויות כלליות</h3>
+        <ul>
+          <li><b>גמלת ילד נכה מביטוח לאומי:</b> אוטיזם מוגדר בתקנות "ליקוי מיוחד". הגמלה ניתנת מגיל 91 יום ועד גיל 18 ו-3 חודשים, בשיעור מלא או חלקי לפי האבחון.</li>
+          <li><b>טיפולים פרא-רפואיים בקופת החולים:</b> קלינאות תקשורת, ריפוי בעיסוק ופיזיותרפיה, וכן טיפולים התפתחותיים.</li>
+          <li><b>שירותי משרד הרווחה:</b> מסגרות פנאי, מועדוניות, נופשונים ומטפח אישי לילדים שגרים בבית ההורים.</li>
+          <li><b>הטבות נלוות לגמלה:</b> נקודות זיכוי ממס, תעודת נכה והנחה בארנונה (ראו פירוט בהמשך).</li>
+        </ul>
+      </div>
+      <div class="box edu">
+        <h3>🎓 זכויות התלמיד במסגרת החינוכית</h3>
+        <ul>
+          <li><b>חינוך מיוחד בחינם מגיל 3 עד 21:</b> גן או כיתת תקשורת, או שילוב בכיתה רגילה עם סייעת. ההורים בוחרים את סוג המסגרת אחרי ועדת זכאות ואפיון.</li>
+          <li><b>הסעה וליווי</b> למסגרת החינוכית, ללא תשלום.</li>
+          <li><b>טיפולים פרא-רפואיים בתוך המסגרת:</b> קלינאות תקשורת, ריפוי בעיסוק וטיפולים רגשיים.</li>
+          <li><b>יום לימודים ארוך ולימודים בחלק מהחופשות</b>, כמו קייטנות של החינוך המיוחד.</li>
+          <li><b>תוכנית לימודים אישית (תל"א)</b> עם מטרות אישיות, שנבנית בשיתוף ההורים.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 3. לקויות למידה -->
+  <details class="condition">
+    <summary>
+      <span class="icon" aria-hidden="true">📚</span>
+      <span class="title"><h2>לקויות למידה</h2><span>דיסלקציה, דיסגרפיה, דיסקלקוליה ועוד</span></span>
+      <span class="arrow" aria-hidden="true">▾</span>
+    </summary>
+    <div class="content">
+      <p class="about">לקות למידה מאובחנת באבחון דידקטי או פסיכו-דידקטי על ידי מאבחן מוסמך.</p>
+      <div class="box general">
+        <h3>🏛️ זכויות כלליות</h3>
+        <ul>
+          <li><b>גמלת ילד נכה:</b> לקות למידה לבדה בדרך כלל אינה מזכה בגמלה. אם יש לילד לקות נוספת, כדאי להגיש תביעה.</li>
+          <li><b>נקודות זיכוי ממס הכנסה</b> להורים, כשהילד לומד במסגרת של החינוך המיוחד (טופס 116 ברשות המסים).</li>
+          <li><b>התאמות במבחנים בהמשך החיים:</b> במבחן הפסיכומטרי, במבחן התאוריה ובמבחני הגיוס לצה"ל.</li>
+          <li><b>במוסדות להשכלה גבוהה:</b> התאמות בקבלה ובלימודים לפי חוק זכויות תלמידים עם לקות למידה במוסדות על-תיכוניים.</li>
+        </ul>
+      </div>
+      <div class="box edu">
+        <h3>🎓 זכויות התלמיד בבית הספר</h3>
+        <ul>
+          <li><b>התאמות בדרכי ההיבחנות:</b> הארכת זמן, הקראת השאלון, הכתבת תשובות לבוחן, התעלמות משגיאות כתיב ובחינה בעל פה, לפי הצורך. ההתאמות תקפות גם בבחינות הבגרות.</li>
+          <li><b>הוראה מתקנת ושעות שילוב</b> עם מורת שילוב בבית הספר הרגיל.</li>
+          <li><b>כיתה מקדמת או כיתת חינוך מיוחד</b> ללקויות למידה, אם ועדת זכאות ואפיון החליטה על כך.</li>
+          <li><b>תוכנית לימודים אישית (תל"א)</b> לתלמיד שמקבל שירותי שילוב.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 4. עיכוב התפתחותי -->
+  <details class="condition">
+    <summary>
+      <span class="icon" aria-hidden="true">🌱</span>
+      <span class="title"><h2>עיכוב התפתחותי</h2><span>התפתחות איטית מהצפוי בתחום אחד או יותר, בגיל הרך</span></span>
+      <span class="arrow" aria-hidden="true">▾</span>
+    </summary>
+    <div class="content">
+      <p class="about">העיכוב נקבע במכון מוכר להתפתחות הילד, לפי הערכה של צוות רב-מקצועי.</p>
+      <div class="box general">
+        <h3>🏛️ זכויות כלליות</h3>
+        <ul>
+          <li><b>גמלת ילד נכה עד גיל 3:</b> ילד עם עיכוב התפתחותי ניכר (תפקוד כללי ברמה של DQ 55 ומטה) זכאי לגמלה בשיעור 100%. לעיכוב קל יותר ייתכנו שיעורים נמוכים יותר.</li>
+          <li><b>המשך הגמלה אחרי גיל 3:</b> אפשר להגיש בקשה לבדיקת תלות כבר בגיל שנתיים ו-10 חודשים.</li>
+          <li><b>מעון יום שיקומי</b> מגיל חצי שנה ועד גיל 3, לפעוטות שזכאים לגמלת ילד נכה.</li>
+          <li><b>טיפולים במכון להתפתחות הילד</b> דרך קופת החולים: פיזיותרפיה, ריפוי בעיסוק וקלינאות תקשורת.</li>
+        </ul>
+      </div>
+      <div class="box edu">
+        <h3>🎓 זכויות הילד במסגרת החינוכית</h3>
+        <ul>
+          <li><b>גן חינוך מיוחד מגיל 3:</b> גן שפה או גן התפתחותי, לפי החלטה של ועדת זכאות ואפיון.</li>
+          <li><b>שילוב בגן רגיל</b> עם סייעת ושעות טיפול, אם ההורים בוחרים בכך.</li>
+          <li><b>הסעה וליווי</b> לגן, ללא תשלום.</li>
+          <li><b>נגישות:</b> כל ילד עם מוגבלות זכאי לנגישות של הגן שבו הוא לומד.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <!-- 5. מוגבלות שכלית התפתחותית -->
+  <details class="condition">
+    <summary>
+      <span class="icon" aria-hidden="true">🤝</span>
+      <span class="title"><h2>מוגבלות שכלית התפתחותית</h2><span>מוגבלות בתפקוד השכלי ובהתנהגות המסתגלת (נקראה בעבר "פיגור שכלי")</span></span>
+      <span class="arrow" aria-hidden="true">▾</span>
+    </summary>
+    <div class="content">
+      <p class="about">האבחון נעשה בוועדת אבחון של משרד הרווחה, שקובעת גם את דרכי הטיפול.</p>
+      <div class="box general">
+        <h3>🏛️ זכויות כלליות</h3>
+        <ul>
+          <li><b>גמלת ילד נכה:</b> ילד שאובחן במשרד הרווחה עם מוגבלות בינונית, קשה או חמורה זכאי לגמלה <b>בלי צורך בוועדה רפואית</b>.</li>
+          <li><b>נופשונים בכל ימות השנה</b> לילדים שגרים בבית ההורים, כדי לאפשר למשפחה הפוגה.</li>
+          <li><b>שירותי משרד הרווחה:</b> קייטנות קיץ, מועדוניות, יום שהות ארוך, ובבגרות גם מסגרות תעסוקה ודיור.</li>
+          <li><b>הטבות נלוות לגמלה:</b> נקודות זיכוי ממס, תעודת נכה והנחה בארנונה (ראו פירוט בהמשך).</li>
+        </ul>
+      </div>
+      <div class="box edu">
+        <h3>🎓 זכויות התלמיד במסגרת החינוכית</h3>
+        <ul>
+          <li><b>חינוך מיוחד בחינם מגיל 3 עד 21</b>, בגן או בבית ספר לחינוך מיוחד, בכיתה מיוחדת בבית ספר רגיל או בשילוב.</li>
+          <li><b>שירותים נלווים:</b> הסעה וליווי, ארוחות, עזרים מסייעים וטיפולים פרא-רפואיים.</li>
+          <li><b>יום לימודים ארוך ולימודים בחלק מהחופשות.</b></li>
+          <li><b>תוכנית לימודים אישית (תל"א)</b> עם דגש על כישורי חיים ועצמאות.</li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <h2 class="section">חשוב לדעת – לכל המשפחות</h2>
+  <div class="common">
+    <div class="box">
+      <h3>💰 הטבות נלוות לגמלת ילד נכה</h3>
+      <ul>
+        <li>נקודות זיכוי ממס הכנסה להורים (טופס 116).</li>
+        <li>תעודת נכה, שנשלחת בדואר.</li>
+        <li>הנחה בארנונה, לפי התנאים של הרשות המקומית.</li>
+        <li>אסור לעקל את הגמלה.</li>
+      </ul>
+      <p class="where">איך מגישים: טופס תביעה באתר ביטוח לאומי או בסניף, יחד עם המסמכים הרפואיים.</p>
+    </div>
+    <div class="box edu">
+      <h3>🎓 ועדת זכאות ואפיון – הזכויות שלכם כהורים</h3>
+      <ul>
+        <li>להשתתף בוועדה, להציג מסמכים ולהביא איש מקצוע או מלווה.</li>
+        <li>לבחור את סוג המסגרת: כיתה רגילה עם שילוב, כיתה מיוחדת או מוסד לחינוך מיוחד.</li>
+        <li>לקבל פרוטוקול של הדיון ולהגיש ערר אם אינכם מסכימים להחלטה.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>שימו לב:</strong> המידע בעמוד נאסף ממקורות ציבוריים (כל זכות, ביטוח לאומי ומשרד החינוך), נכון לנובמבר 2026, ומיועד להתמצאות כללית בלבד. הוא אינו ייעוץ משפטי. הסכומים והתנאים מתעדכנים מעת לעת, ולכן חשוב לבדוק את הזכאות שלכם מול הגורם המוסמך.
+  </div>
+
+  <h2 class="section">לקריאה נוספת</h2>
+  <ul class="sources">
+    <li><a href="https://www.kolzchut.org.il/he/גמלת_ילד_נכה_והטבות_נלוות" target="_blank" rel="noopener">כל זכות – גמלת ילד נכה והטבות נלוות</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/זכותון_לאנשים_עם_הפרעת_קשב_ופעלתנות_יתר_(ADHD)" target="_blank" rel="noopener">כל זכות – זכותון ADHD</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/אנשים_על_רצף_האוטיזם" target="_blank" rel="noopener">כל זכות – אנשים על רצף האוטיזם</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/לקויות_למידה_והפרעת_קשב_ופעלתנות_יתר" target="_blank" rel="noopener">כל זכות – לקויות למידה</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/מעון_יום_שיקומי" target="_blank" rel="noopener">כל זכות – מעון יום שיקומי</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/מוגבלות_שכלית_התפתחותית" target="_blank" rel="noopener">כל זכות – מוגבלות שכלית התפתחותית</a></li>
+    <li><a href="https://www.kolzchut.org.il/he/חינוך_מיוחד_ושילוב_בחינוך" target="_blank" rel="noopener">כל זכות – חינוך מיוחד ושילוב</a></li>
+    <li><a href="https://www.btl.gov.il" target="_blank" rel="noopener">המוסד לביטוח לאומי</a> · מוקד <bdi dir="ltr">*6050</bdi></li>
+  </ul>
+
+</main>
+
+<footer>
+  <div class="wrap">קהילת משפחות מיוחדות · עמוד מידע להורים · אינו מהווה ייעוץ משפטי</div>
+</footer>
+
+<script>
+  // כפתור "פתיחת הכל / סגירת הכל"
+  const all = document.querySelectorAll("details.condition");
+  const btn = document.getElementById("toggle-all");
+  function sync() {
+    const anyClosed = [...all].some(d => !d.open);
+    btn.textContent = anyClosed ? "פתיחת הכל" : "סגירת הכל";
+  }
+  btn.addEventListener("click", () => {
+    const open = [...all].some(d => !d.open);
+    all.forEach(d => d.open = open);
+    sync();
+  });
+  all.forEach(d => d.addEventListener("toggle", sync));
+</script>
+</body>
+</html>
