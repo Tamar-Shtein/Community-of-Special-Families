@@ -1,0 +1,57 @@
+{
+ "checked_at": "2026-11-22T17:23:20Z",
+ "total": 8,
+ "ok": 1,
+ "broken": 0,
+ "unknown": 7,
+ "links": [
+  {
+   "url": "https://www.kolzchut.org.il/he/גמלת_ילד_נכה_והטבות_נלוות",
+   "text": "כל זכות – גמלת ילד נכה והטבות נלוות",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/זכותון_לאנשים_עם_הפרעת_קשב_ופעלתנות_יתר_(ADHD)",
+   "text": "כל זכות – זכותון ADHD",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/אנשים_על_רצף_האוטיזם",
+   "text": "כל זכות – אנשים על רצף האוטיזם",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/לקויות_למידה_והפרעת_קשב_ופעלתנות_יתר",
+   "text": "כל זכות – לקויות למידה",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/מעון_יום_שיקומי",
+   "text": "כל זכות – מעון יום שיקומי",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/מוגבלות_שכלית_התפתחותית",
+   "text": "כל זכות – מוגבלות שכלית התפתחותית",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.kolzchut.org.il/he/חינוך_מיוחד_ושילוב_בחינוך",
+   "text": "כל זכות – חינוך מיוחד ושילוב",
+   "state": "unknown",
+   "detail": 403
+  },
+  {
+   "url": "https://www.btl.gov.il",
+   "text": "המוסד לביטוח לאומי",
+   "state": "ok",
+   "detail": 200
+  }
+ ]
+}
