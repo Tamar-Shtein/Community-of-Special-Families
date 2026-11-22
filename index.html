@@ -110,6 +110,8 @@
   .note { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; font-size: 16px; color: var(--muted); }
   .note strong { color: var(--text); }
   .sources { columns: 2 260px; padding-inline-start: 22px; font-size: 16px; }
+  .link-status { font-size: 15px; color: var(--muted); margin-top: 8px; }
+  .link-status .bad { color: #B3261E; font-weight: 700; }
   footer { margin: 32px 0 0; padding: 22px 0; background: var(--cream); border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); text-align: center; }
 
   @media (max-width: 520px) {
@@ -332,6 +334,7 @@
     <li><a href="https://www.kolzchut.org.il/he/חינוך_מיוחד_ושילוב_בחינוך" target="_blank" rel="noopener">כל זכות – חינוך מיוחד ושילוב</a></li>
     <li><a href="https://www.btl.gov.il" target="_blank" rel="noopener">המוסד לביטוח לאומי</a> · מוקד <bdi dir="ltr">*6050</bdi></li>
   </ul>
+  <p class="link-status" id="link-status" hidden></p>
 
 </main>
 
@@ -353,6 +356,20 @@
     sync();
   });
   all.forEach(d => d.addEventListener("toggle", sync));
+
+  // בדיקת קישורים שבועית: GitHub Actions בודק שכל קישורי המקורות עובדים
+  // (scripts/check_links.py) ושומר את התוצאה ב-data/links-status.json
+  fetch("data/links-status.json", { cache: "no-store" })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(s => {
+      const el = document.getElementById("link-status");
+      const when = new Date(s.checked_at).toLocaleDateString("he-IL", { day: "numeric", month: "numeric", year: "numeric" });
+      el.innerHTML = `🔗 הקישורים נבדקו אוטומטית ב-${when}: ${s.ok} מתוך ${s.total} תקינים` +
+        (s.broken ? ` · <span class="bad">${s.broken} שבורים, ואנחנו מטפלים בזה</span>` : "") +
+        (s.unknown ? ` · ${s.unknown} לא נבדקו (האתר חסם בדיקה אוטומטית)` : "");
+      el.hidden = false;
+    })
+    .catch(() => {});  // אין עדיין תוצאה: לא מציגים כלום
 </script>
 </body>
 </html>
